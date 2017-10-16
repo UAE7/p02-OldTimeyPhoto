@@ -8,9 +8,48 @@ using namespace std;
   Bitmap image;
   vector <vector <Pixel> > bmp;
   Pixel rgb;
-  image.open("machupicch.bmp");
+  string fileName;
+  bool validBmpFile = false;
+
+  while(!validBmpFile)
+  {
+  cout << "Enter a file name for converting to old timely image (greyscale): ";
+  cin >> fileName;
+
+  image.open(fileName);
+
+  validBmpFile = image.isImage();
+  }
+
+  if(validBmpFile)
+  {
+
   bmp = image.toPixelMatrix();
-  cout<<"machupicch.bmp has been loaded. it is "<<bmp[0].size()<<" pixels wide and "<<bmp.size()<<" pixels high."<<endl;
+
+  for(int i = 0; i < bmp.size(); i++)
+  {
+
+  vector <Pixel> temp = bmp.at(i);
+
+  for(int j = 0; j < temp.size(); j++)
+  {
+
+  rgb = temp.at(j);
+
+  int avg = (int)(rgb.red + rgb.green + rgb.blue) / 3;
+  rgb.red = rgb.green = rgb.blue = avg;
+
+  bmp[i][j] = rgb;
+
+  }
+  }
+
+  image.fromPixelMatrix(bmp);
+
+  cout << "Saving " << fileName << " as oldtimely.bmp.";
+  image.save("oldtimely.bmp");
+
+  }
 
   return 0;
           }
